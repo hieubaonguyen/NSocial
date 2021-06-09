@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{15434588-67C5-42B9-9522-379D081B458C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{15434588-67C5-42B9-9522-379D081B458C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\Persistence.csproj", "{A31B7B08-B4FB-40D5-A280-B65A4DB2E728}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\Persistence.csproj", "{A31B7B08-B4FB-40D5-A280-B65A4DB2E728}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{83EEC4BD-CB36-4D34-A08A-11551984F514}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{83EEC4BD-CB36-4D34-A08A-11551984F514}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSocial", "NSocial\NSocial.csproj", "{3E61AAAE-F177-42B0-872F-649656F6B482}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSocialAdmin", "NSocial\NSocialAdmin.csproj", "{3E61AAAE-F177-42B0-872F-649656F6B482}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
