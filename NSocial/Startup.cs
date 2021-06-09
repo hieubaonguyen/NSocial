@@ -21,8 +21,8 @@ namespace NSocial
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<NSocialDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                o => o.MigrationsAssembly("NSocial.Persistence")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddControllers();
         }
 

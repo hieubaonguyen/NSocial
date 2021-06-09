@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Persistence;
 
 namespace NSocial.Controllers
 {
@@ -17,10 +19,12 @@ namespace NSocial.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly NSocialDbContext _context;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, NSocialDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         [HttpGet]
@@ -34,6 +38,11 @@ namespace NSocial.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+        public async Task<ActionResult<Value>> GetId(int id)
+        {
+            var value = await _context.values.FindAsync(id);
+            return Ok(value);
         }
     }
 }
