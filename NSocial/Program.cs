@@ -24,6 +24,7 @@ namespace NSocial
                 {
                     var context = service.GetRequiredService<NSocialDbContext>();
                     context.Database.Migrate();
+                    Seed.SeedData(context);
                 }
                 catch(Exception ex)
                 {
