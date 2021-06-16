@@ -39,7 +39,7 @@ namespace NSocialAdmin.Controllers
             return await _mediator.Send(command);
         }
         [HttpDelete("{Id}")]
-        public async Task<ActionResult<Unit>> Edit(Guid id)
+        public async Task<ActionResult<Unit>> Delete(Guid id)
         {
             return await _mediator.Send(new Delete.Command { Id = id });
         }
