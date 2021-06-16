@@ -1,15 +1,20 @@
 import React, { FormEvent, useState } from "react";
 import { Button, Form, Segment } from "semantic-ui-react";
 import { IActivity } from "../../../App/Models/Activity";
+import {v4 as uuid} from 'uuid';
 
 interface IProps {
   setEditMode: (editMode: boolean) => void;
   activity: IActivity;
+  handleCreateActivity: (activity: IActivity) => void;
+  handleEditActivity: (activity: IActivity) => void;
 }
 
 const ActivityForm: React.FC<IProps> = ({
   setEditMode,
   activity: InitialFormState,
+  handleCreateActivity,
+  handleEditActivity
 }) => {
   const initialForm = () => {
     if (InitialFormState) {
@@ -34,9 +39,21 @@ const ActivityForm: React.FC<IProps> = ({
     setActivity({ ...activity, [name]: value });
   };
 
+  const handleSubmitForm = () => {
+    if(activity.id.length === 0){
+      let newActivity = {
+        ...activity,
+        id: uuid()
+      }
+      handleCreateActivity(newActivity);
+    }
+    else{
+      handleEditActivity(activity);
+    }
+  }
   return (
     <Segment clearing>
-      <Form>
+      <Form onSubmit={handleSubmitForm}>
         <Form.Input
           onChange={handleInputChange}
           name="title"
