@@ -6,12 +6,14 @@ import NavBar from '../../Features/Nav/NavBar';
 import { Container } from 'semantic-ui-react';
 import DashBoardActivities from '../../Features/Activities/DashBoard/DashBoardActivities';
 import agent from '../api/agent';
+import LoadingComponent from '../Layout/LoadingComponent';
 
 const App = () => {
 
   const [activities, setActivities] = useState<IActivity[]>([]);
   const [selectedActivity, setSelectedActivity] = useState<IActivity | null>(null);
   const [editMode, setEditMode] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true);
 
   const handleOpenCreateForm = () => {
     setSelectedActivity(null);
@@ -33,7 +35,7 @@ const App = () => {
 
   const handleEditActivity = (activity : IActivity) => {
     agent.Activities.update(activity).then(() => {
-      setActivities([...activities.filter(a => a.id !== activity.id), activity]);
+      setActivities([activity, ...activities.filter(a => a.id !== activity.id)]);
       setSelectedActivity(activity);
       setEditMode(false);
     })
@@ -42,6 +44,9 @@ const App = () => {
   const handleDeleteActivity = (id: string) => {
     agent.Activities.delete(id).then(() => {
       setActivities([...activities.filter(a => a.id !== id)]);
+      if(id === selectedActivity?.id){
+        setSelectedActivity(null);
+      }
     })
   }
 
@@ -54,13 +59,11 @@ const App = () => {
             activities.push(activity);
           });
           setActivities(activities);
-        });
+        }).then(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    let activity = activities.filter(a => a.id === selectedActivity?.id)[0];
-    setSelectedActivity(activity || null);
-  }, [activities])
+  
+  if(loading) return <LoadingComponent content="Loading Activities..."/>
 
   return (
     <Fragment>
