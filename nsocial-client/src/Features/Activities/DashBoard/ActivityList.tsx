@@ -4,10 +4,15 @@ import { IActivity } from "../../../App/Models/Activity";
 
 interface IProps {
   activities: IActivity[];
-  handleSelectActivity: (id:string) => void;
+  handleSelectActivity: (id: string) => void;
+  handleDeleteActivity: (id: string) => void;
 }
 
-const ActivityList: React.FC<IProps> = ({ activities, handleSelectActivity }) => {
+const ActivityList: React.FC<IProps> = ({
+  activities,
+  handleSelectActivity,
+  handleDeleteActivity,
+}) => {
   return (
     <Segment clearing>
       <Item.Group divided>
@@ -18,14 +23,22 @@ const ActivityList: React.FC<IProps> = ({ activities, handleSelectActivity }) =>
               <Item.Meta>{activity.date}</Item.Meta>
               <Item.Description>
                 <div>{activity.description}</div>
-                <div>{activity.city}, {activity.venue}</div>
+                <div>
+                  {activity.city}, {activity.venue}
+                </div>
               </Item.Description>
               <Item.Extra>
-                <Button 
-                  floated="right" 
-                  content="View" 
+                <Button
+                  floated="right"
+                  content="View"
                   color="blue"
                   onClick={() => handleSelectActivity(activity.id)}
+                />
+                <Button
+                  floated="right"
+                  content="Delete"
+                  color="red"
+                  onClick={() => handleDeleteActivity(activity.id)}
                 />
                 <Label basic content={activity.category} />
               </Item.Extra>

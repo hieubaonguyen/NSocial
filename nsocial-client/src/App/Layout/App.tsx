@@ -35,6 +35,10 @@ const App = () => {
     setEditMode(false);
   }
 
+  const handleDeleteActivity = (id: string) => {
+    setActivities([...activities.filter(a => a.id !== id)]);
+  }
+
   useEffect(() => {
     axios.get<IActivity[]>('https://localhost:44383/activities')
         .then(response => {
@@ -46,6 +50,11 @@ const App = () => {
           setActivities(activities);
         });
   }, []);
+
+  useEffect(() => {
+    let activity = activities.filter(a => a.id === selectedActivity?.id)[0];
+    setSelectedActivity(activity || null);
+  }, [activities])
 
   return (
     <Fragment>
@@ -60,6 +69,7 @@ const App = () => {
           setSelectedActivity={setSelectedActivity}
           handleCreateActivity={handleCreateActivity}
           handleEditActivity={handleEditActivity}
+          handleDeleteActivity={handleDeleteActivity}
         />
       </Container>
     </Fragment>

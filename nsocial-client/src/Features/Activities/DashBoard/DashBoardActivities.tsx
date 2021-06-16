@@ -14,6 +14,7 @@ interface IProps {
   setSelectedActivity: (activity: IActivity | null) => void;
   handleCreateActivity: (activity: IActivity) => void;
   handleEditActivity: (activity: IActivity) => void;
+  handleDeleteActivity: (id: string) => void;
 }
 
 const DashBoardActivities: React.FC<IProps> = ({
@@ -24,7 +25,8 @@ const DashBoardActivities: React.FC<IProps> = ({
   setEditMode,
   setSelectedActivity,
   handleCreateActivity,
-  handleEditActivity
+  handleEditActivity,
+  handleDeleteActivity
 }) => {
   return (
     <Grid>
@@ -32,6 +34,7 @@ const DashBoardActivities: React.FC<IProps> = ({
         <ActivityList
           activities={activities}
           handleSelectActivity={handleSelectActivity}
+          handleDeleteActivity={handleDeleteActivity}
         />
       </GridColumn>
       <GridColumn width={6}>
