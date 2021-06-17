@@ -20,11 +20,6 @@ const App = () => {
   const [submitting, setSubmitting] = useState(false);
   const [target, setTarget] = useState('');
 
-  const handleOpenCreateForm = () => {
-    setSelectedActivity(null);
-    setEditMode(true);
-  }
-
   const handleSelectActivity = (id: string) => {
     setSelectedActivity(activities.filter(a => a.id === id)[0]);
     setEditMode(false);
@@ -68,16 +63,13 @@ const App = () => {
 
   return (
     <Fragment>
-      <NavBar openCreateForm={handleOpenCreateForm} />
+      <NavBar />
       <Container style={{marginTop:"7em"}}>
         <DashBoardActivities 
           activities={activityStore.activities}
-          handleSelectActivity={handleSelectActivity}  
-          selectedActivity={selectedActivity!}
-          editMode={editMode}
+          handleSelectActivity={handleSelectActivity}
           setEditMode={setEditMode}
           setSelectedActivity={setSelectedActivity}
-          handleCreateActivity={handleCreateActivity}
           handleEditActivity={handleEditActivity}
           handleDeleteActivity={handleDeleteActivity}
           submitting={submitting}
