@@ -1,3 +1,4 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { Button, Card, Image } from "semantic-ui-react";
 import { IActivity } from "../../../App/Models/Activity";
@@ -31,4 +32,4 @@ const ActivityDetail: React.FC<IProps> = ({activity, setEditMode, setActivity}) 
   );
 };
 
-export default ActivityDetail;
+export default observer(ActivityDetail);
