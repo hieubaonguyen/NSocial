@@ -1,9 +1,10 @@
-import { action, makeObservable, observable } from "mobx";
+import { action, computed, makeObservable, observable } from "mobx";
 import { createContext } from "react";
 import agent from "../api/agent";
 import {IActivity} from '../Models/Activity';
 
-class ActivityStore{
+export class ActivityStore{
+    @observable activitiesRegistry = new Map();
     @observable activities: IActivity[] = [];
     @observable loadingInitial = false;
     @observable selectedActivity: IActivity | null = null;
@@ -14,13 +15,17 @@ class ActivityStore{
         makeObservable(this);
     }
 
+    @computed get getActivitiesByDate() {
+        return Array.from(this.activitiesRegistry.values()).sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+    }
+
     @action loadActivities = async () => {
         this.loadingInitial = true;
         try{
             const activities = await agent.Activities.list();
             activities.forEach((activity) => {
                 activity.date = activity.date.split('.')[0];
-                this.activities.push(activity);
+                this.activitiesRegistry.set(activity.id, activity);
             });
             this.loadingInitial = false
         }catch(error){
@@ -30,7 +35,7 @@ class ActivityStore{
     }
 
     @action selectActivity = (id: string) => {
-        this.selectedActivity = this.activities.filter(a => a.id === id)[0];
+        this.selectedActivity = this.activitiesRegistry.get(id);
         this.editMode = false;
     }
 
@@ -39,7 +44,7 @@ class ActivityStore{
         try{
             
             await agent.Activities.create(activity);
-            this.activities.push(activity);
+            this.activitiesRegistry.set(activity.id, activity);
             this.selectedActivity = activity;
             this.editMode = false;
             this.submitting = false;
