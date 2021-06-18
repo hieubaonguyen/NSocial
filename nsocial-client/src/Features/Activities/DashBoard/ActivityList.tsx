@@ -1,21 +1,13 @@
-import React, { SyntheticEvent, useContext } from "react";
+import React, { useContext } from "react";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 import ActivityStore from "../../../App/stores/ActivityStore";
 
-interface IProps {
-  handleDeleteActivity: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
-  submitting: boolean;
-  target: string;
-}
+const ActivityList = () => {
 
-const ActivityList: React.FC<IProps> = ({
-  handleDeleteActivity,
-  submitting,
-  target
-}) => {
   const activityStore = useContext(ActivityStore);
-  const {getActivitiesByDate, selectActivity} = activityStore;
+  const {getActivitiesByDate, selectActivity, deleteActivity, submitting, target} = activityStore;
+
   return (
     <Segment clearing>
       <Item.Group divided>
@@ -43,7 +35,7 @@ const ActivityList: React.FC<IProps> = ({
                   floated="right"
                   content="Delete"
                   color="red"
-                  onClick={(event) => handleDeleteActivity(event, activity.id)}
+                  onClick={(event) => deleteActivity(event, activity.id)}
                 />
                 <Label basic content={activity.category} />
               </Item.Extra>

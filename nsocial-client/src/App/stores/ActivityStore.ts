@@ -1,5 +1,5 @@
 import { action, computed, makeObservable, observable } from "mobx";
-import { createContext } from "react";
+import { createContext, SyntheticEvent } from "react";
 import agent from "../api/agent";
 import {IActivity} from '../Models/Activity';
 
@@ -10,6 +10,7 @@ export class ActivityStore{
     @observable selectedActivity: IActivity | null = null;
     @observable editMode = false;
     @observable submitting = false;
+    @observable target = '';
 
     constructor() {
         makeObservable(this);
@@ -54,8 +55,53 @@ export class ActivityStore{
         }
     }
 
+    @action editActivity = async (activity: IActivity) => {
+        this.submitting = true;
+        try{
+            await agent.Activities.update(activity);
+            this.activitiesRegistry.set(activity.id, activity);
+            this.selectedActivity = activity;
+            this.editMode = false;
+            this.submitting = false;
+        }catch(error){
+            console.log(error);
+            this.submitting = false;
+        }
+    } 
+
+    @action deleteActivity = async (event: SyntheticEvent<HTMLButtonElement>, id: string) => {
+        this.submitting = true;
+        this.target = event.currentTarget.name;
+        try{
+            await agent.Activities.delete(id);
+            this.activitiesRegistry.delete(id);
+            
+            if(id === this.selectedActivity?.id){
+                this.selectedActivity = null;
+            }
+            this.target = '';
+            this.submitting = false;
+        } catch(error){
+            console.log(error);
+            this.target = '';
+            this.submitting = false;
+        }
+    }
+
+    @action cancelOpenForm = () => {
+        this.editMode = false;
+    }
+
+    @action cancelSelectedActivity = () => {
+        this.selectedActivity = null;
+    }
+
     @action openCreateForm = () => {
         this.selectedActivity = null;
+        this.editMode = true;
+    }
+
+    @action openEditForm = () => {
         this.editMode = true;
     }
 }
