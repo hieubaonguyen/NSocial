@@ -1,83 +1,63 @@
-import {useState, useEffect, Fragment, SyntheticEvent, useContext} from 'react';
-import './styles.css';
-import 'semantic-ui-css/semantic.min.css';
-import { IActivity } from '../Models/Activity';
-import NavBar from '../../Features/Nav/NavBar';
-import { Container } from 'semantic-ui-react';
-import DashBoardActivities from '../../Features/Activities/DashBoard/DashBoardActivities';
-import agent from '../api/agent';
-import LoadingComponent from '../Layout/LoadingComponent';
-import {observer} from 'mobx-react-lite';
-import ActivityStore from '../stores/ActivityStore';
+import { Fragment } from "react";
+import "./styles.css";
+import "semantic-ui-css/semantic.min.css";
+import NavBar from "../../Features/Nav/NavBar";
+import { Container } from "semantic-ui-react";
+import DashBoardActivities from "../../Features/Activities/DashBoard/DashBoardActivities";
+import { observer } from "mobx-react-lite";
+import {
+  Route,
+  RouteComponentProps,
+  Switch,
+  withRouter,
+} from "react-router-dom";
+import HomePage from "../../Features/Home/HomePage";
+import CreateActivity from "../../Features/Activities/Form/ActivityForm";
+import ActivityDetail from "../../Features/Activities/Detail/ActivityDetail";
+import NotFound from "./NotFound";
+import { ToastContainer } from "react-toastify";
 
-const App = () => {
-
-  const activityStore = useContext(ActivityStore);
-  const [activities, setActivities] = useState<IActivity[]>([]);
-  const [selectedActivity, setSelectedActivity] = useState<IActivity | null>(null);
-  const [editMode, setEditMode] = useState<boolean>(false);
-  const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [target, setTarget] = useState('');
-
-  const handleSelectActivity = (id: string) => {
-    setSelectedActivity(activities.filter(a => a.id === id)[0]);
-    setEditMode(false);
-  }
-
-  const handleCreateActivity = (activity : IActivity) => {
-    setSubmitting(true);
-    agent.Activities.create(activity).then(() => {
-      setActivities([activity, ...activities]);
-      setSelectedActivity(activity);
-      setEditMode(false);
-    }).then(() => setSubmitting(false));
-  }
-
-  const handleEditActivity = (activity : IActivity) => {
-    setSubmitting(true);
-    agent.Activities.update(activity).then(() => {
-      setActivities([activity, ...activities.filter(a => a.id !== activity.id)]);
-      setSelectedActivity(activity);
-      setEditMode(false);
-    }).then(() => setSubmitting(false));
-  }
-
-  const handleDeleteActivity = (event: SyntheticEvent<HTMLButtonElement>, id: string) => {
-    setSubmitting(true);
-    setTarget(event.currentTarget.name);
-    agent.Activities.delete(id).then(() => {
-      setActivities([...activities.filter(a => a.id !== id)]);
-      if(id === selectedActivity?.id){
-        setSelectedActivity(null);
-      }
-    }).then(() => setSubmitting(false));
-  }
-
-  useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore]);
-
-  
-  if(activityStore.loadingInitial) return <LoadingComponent content="Loading Activities..."/>
-
+const App: React.FC<RouteComponentProps> = ({ location }) => {
   return (
     <Fragment>
-      <NavBar />
-      <Container style={{marginTop:"7em"}}>
-        <DashBoardActivities 
-          activities={activityStore.activities}
-          handleSelectActivity={handleSelectActivity}
-          setEditMode={setEditMode}
-          setSelectedActivity={setSelectedActivity}
-          handleEditActivity={handleEditActivity}
-          handleDeleteActivity={handleDeleteActivity}
-          submitting={submitting}
-          target={target}
-        />
-      </Container>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <Route exact path="/" component={HomePage} />
+      <Route
+        path={"/(.+)"}
+        render={() => (
+          <Fragment>
+            <NavBar />
+            <Container style={{ marginTop: "7em" }}>
+              <Switch>
+                <Route
+                  exact
+                  path="/activities"
+                  component={DashBoardActivities}
+                />
+                <Route path="/activities/:id" component={ActivityDetail} />
+                <Route
+                  key={location.key}
+                  path={["/create-activities", "/manage/:id"]}
+                  component={CreateActivity}
+                />
+                <Route component={NotFound} />
+              </Switch>
+            </Container>
+          </Fragment>
+        )}
+      />
     </Fragment>
   );
-}
+};
 
-export default observer(App);
+export default withRouter(observer(App));
