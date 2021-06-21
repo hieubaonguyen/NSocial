@@ -43,17 +43,18 @@ export class ActivityStore{
             this.activity = activity;
         }else{
             this.loadingInitial = true;
-            try{
+            try
+            {
                 activity = await agent.Activities.details(id);
                 runInAction(() => {
                     this.activity = activity;
                     this.loadingInitial = false;
                 });
             }catch(error){
-                console.log(error);
                 runInAction(() => { 
                     this.loadingInitial = false;
                 })
+                console.log(error);
             }
         }
     }
