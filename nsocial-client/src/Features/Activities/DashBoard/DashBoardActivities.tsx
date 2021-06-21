@@ -1,30 +1,28 @@
-import React, { SyntheticEvent, useContext } from "react";
 import { Grid, GridColumn } from "semantic-ui-react";
 import ActivityList from "./ActivityList";
-import ActivityDetail from "../Detail/ActivityDetail";
-import ActivityForm from "../Form/ActivityForm";
 import { observer } from "mobx-react-lite";
+import { useContext, useEffect } from "react";
 import ActivityStore from "../../../App/stores/ActivityStore";
+import LoadingComponent from "../../../App/Layout/LoadingComponent";
 
 const DashBoardActivities = () => {
 
   const activityStore = useContext(ActivityStore);
-  const {selectedActivity, editMode} = activityStore;
 
+  useEffect(() => {
+    activityStore.loadActivities();
+  }, [activityStore]);
+
+  if (activityStore.loadingInitial)
+    return <LoadingComponent content="Loading Activities..." />;
+    
   return (
     <Grid>
       <GridColumn width={10}>
         <ActivityList />
       </GridColumn>
       <GridColumn width={6}>
-        {selectedActivity && !editMode && (
-          <ActivityDetail />
-        )}
-        {editMode && (
-          <ActivityForm
-            key={(selectedActivity && selectedActivity.id) || 0}
-          />
-        )}
+        <h1>Activity</h1>
       </GridColumn>
     </Grid>
   );
