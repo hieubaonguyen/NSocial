@@ -24,7 +24,6 @@ namespace Application.Activities
             }
             public async Task<Activity> Handle(Query request, CancellationToken cancellationToken)
             {
-                throw new Exception("Server error");
 
                 var activity = await _context.activities.FindAsync(request.Id);
 
