@@ -5,6 +5,7 @@ import App from "./App/Layout/App";
 import reportWebVitals from "./reportWebVitals";
 import ScrollToTop from "./App/Layout/ScrollToTop";
 import 'react-toastify/dist/ReactToastify.css';
+import "react-widgets/styles.css";
 
 export const history = createBrowserHistory();
 

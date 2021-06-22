@@ -6,10 +6,11 @@ import { observer } from "mobx-react-lite";
 import ActivityStore from "../../../App/stores/ActivityStore";
 import { RouteComponentProps } from "react-router-dom";
 import { Form as FinalForm, Field } from "react-final-form";
-import TextInput from '../../../App/Commons/Form/TextInput';
-import TextAreaInput from '../../../App/Commons/Form/TextAreaInput';
-import SelectInput from '../../../App/Commons/Form/SelectInput';
-import {category} from '../../../App/Commons/Options/CategoryOptions';
+import TextInput from "../../../App/Commons/Form/TextInput";
+import TextAreaInput from "../../../App/Commons/Form/TextAreaInput";
+import SelectInput from "../../../App/Commons/Form/SelectInput";
+import { category } from "../../../App/Commons/Options/CategoryOptions";
+import DateInput from "../../../App/Commons/Form/DateInput";
 
 interface DetailParams {
   id: string;
@@ -46,7 +47,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
     title: "",
     category: "",
     city: "",
-    date: "",
+    date: null,
     description: "",
     venue: "",
   });
@@ -109,8 +110,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                 <Field
                   name="date"
                   placeholder="Date"
-                  value={activity.date}
-                  render={TextInput}
+                  value={activity.date!}
+                  render={DateInput}
                 />
                 <Field
                   name="city"
