@@ -41,6 +41,7 @@ export class ActivityStore{
         let activity = this.getActivity(id);
         if(activity){
             this.activity = activity;
+            return activity;
         }else{
             this.loadingInitial = true;
             try
@@ -48,9 +49,11 @@ export class ActivityStore{
                 activity = await agent.Activities.details(id);
                 runInAction(() => {
                     activity.date = new Date(activity.date!);
+                    this.activitiesRegistry.set(activity.id, activity);
                     this.activity = activity;
                     this.loadingInitial = false;
                 });
+                return activity;
             }catch(error){
                 runInAction(() => { 
                     this.loadingInitial = false;
@@ -71,7 +74,7 @@ export class ActivityStore{
                 this.submitting = false;
             })        
         }catch(error){
-            console.log(error);
+            console.log(error.response);
             runInAction(() => {
                 this.submitting = false;
             })

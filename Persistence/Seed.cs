@@ -1,14 +1,47 @@
 ﻿using Domain;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Persistence
 {
     public class Seed
     {
-        public static void SeedData(NSocialDbContext context)
+        public static async Task SeedData(NSocialDbContext context, UserManager<AppUser> userManager)
         {
+            if (!userManager.Users.Any())
+            {
+                var users = new List<AppUser>
+                {
+                    new AppUser
+                    {
+                        DisplayName = "Bob",
+                        Email = "bob@test.com",
+                        UserName = "bob"
+                    },
+                    new AppUser
+                    {
+                        DisplayName = "Alice",
+                        Email = "alice@test.com",
+                        UserName = "alice"
+                    },
+                    new AppUser
+                    {
+                        DisplayName = "Tom",
+                        Email = "tom@test.com",
+                        UserName = "tom"
+                    },
+                };
+
+                foreach(var user in users)
+                {
+                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                }
+
+            }
+
             if (!context.activities.Any())
             {
                 var activities = new List<Activity>

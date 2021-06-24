@@ -1,4 +1,5 @@
 using Application.Activities;
+using Domain;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -26,6 +27,7 @@ namespace NSocial
         {
             services.AddDbContext<NSocialDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", policy =>
@@ -37,6 +39,10 @@ namespace NSocial
 
             services.AddMvc()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Create>());
+
+
+            services.AddDefaultIdentity<AppUser>()
+                .AddEntityFrameworkStores<NSocialDbContext>();
 
             services.AddControllers();
         }
