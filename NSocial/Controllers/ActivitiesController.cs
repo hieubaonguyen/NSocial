@@ -1,6 +1,7 @@
 ﻿using Application.Activities;
 using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace NSocialAdmin.Controllers
             return await Mediator.Send(new List.Query());
         }
         [HttpGet("{Id}")]
+        [Authorize]
         public async Task<ActionResult<Activity>> Detail(Guid id)
         {
             return await Mediator.Send(new Detail.Query { Id = id });
