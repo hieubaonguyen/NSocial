@@ -25,42 +25,42 @@ namespace Application.Users
                 RuleFor(x => x.Email).NotEmpty();
                 RuleFor(x => x.Password).NotEmpty();
             }
+        }
 
-            public class Handler : IRequestHandler<Query, User>
+        public class Handler : IRequestHandler<Query, User>
+        {
+            private readonly UserManager<AppUser> _userManager;
+            private readonly SignInManager<AppUser> _signinManager;
+            private readonly IJwtGenerator _jwtGenerator;
+            public Handler(UserManager<AppUser> userManager, SignInManager<AppUser> signinManager, IJwtGenerator jwtGenerator)
             {
-                private readonly UserManager<AppUser> _userManager;
-                private readonly SignInManager<AppUser> _signinManager;
-                private readonly IJwtGenerator _jwtGenerator;
-                public Handler(UserManager<AppUser> userManager, SignInManager<AppUser> signinManager, IJwtGenerator jwtGenerator)
+                _userManager = userManager;
+                _signinManager = signinManager;
+                _jwtGenerator = jwtGenerator;
+            }
+            public async Task<User> Handle(Query request, CancellationToken cancellationToken)
+            {
+                var user = await _userManager.FindByEmailAsync(request.Email);
+
+                if (user == null)
                 {
-                    _userManager = userManager;
-                    _signinManager = signinManager;
-                    _jwtGenerator = jwtGenerator;
-                }
-                public async Task<User> Handle(Query request, CancellationToken cancellationToken)
-                {
-                    var user = await _userManager.FindByEmailAsync(request.Email);
-
-                    if (user == null)
-                    {
-                        throw new RestException(HttpStatusCode.Unauthorized);
-                    }
-
-                    var result = await _signinManager.CheckPasswordSignInAsync(user, request.Password, false);
-
-                    if (result.Succeeded)
-                    {
-                        return new User
-                        {
-                            DisplayName = user.DisplayName,
-                            Token = _jwtGenerator.CreateToken(user),
-                            UserName = user.UserName,
-                            Image = null
-                        };
-                    }
-
                     throw new RestException(HttpStatusCode.Unauthorized);
                 }
+
+                var result = await _signinManager.CheckPasswordSignInAsync(user, request.Password, false);
+
+                if (result.Succeeded)
+                {
+                    return new User
+                    {
+                        DisplayName = user.DisplayName,
+                        Token = _jwtGenerator.CreateToken(user),
+                        UserName = user.UserName,
+                        Image = null
+                    };
+                }
+
+                throw new RestException(HttpStatusCode.Unauthorized);
             }
         }
     }

@@ -5,8 +5,10 @@ using FluentValidation.AspNetCore;
 using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,16 +44,20 @@ namespace NSocial
             });
             services.AddMediatR(typeof(List.Handler).Assembly);
 
-            services.AddMvc()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Create>());
+            services.AddMvc(opt => 
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            })
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Create>());
 
 
             services.AddDefaultIdentity<AppUser>()
                 .AddEntityFrameworkStores<NSocialDbContext>();
 
-            services.AddScoped<IJwtGenerator, JwtGenerator>();
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super secret key"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"]));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opt =>
                 {
@@ -63,6 +69,11 @@ namespace NSocial
                         ValidateIssuer = false
                     };
                 });
+
+
+            services.AddScoped<IJwtGenerator, JwtGenerator>();
+            services.AddScoped<IUserAccessor, UserAccessor>();
+
 
             services.AddControllers();
         }
