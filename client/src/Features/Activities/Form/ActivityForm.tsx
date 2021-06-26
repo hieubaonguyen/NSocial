@@ -3,7 +3,6 @@ import { Button, Form, Grid, Segment } from "semantic-ui-react";
 import { IActivity } from "../../../App/Models/Activity";
 import { v4 as uuid } from "uuid";
 import { observer } from "mobx-react-lite";
-import ActivityStore from "../../../App/stores/ActivityStore";
 import { RouteComponentProps } from "react-router-dom";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../../App/Commons/Form/TextInput";
@@ -17,6 +16,7 @@ import {
   isRequired,
   hasLengthGreaterThan,
 } from "revalidate";
+import { RootStoreContext } from "../../../App/stores/RootStore";
 
 const formValidate = combineValidators({
   title: isRequired({
@@ -52,13 +52,13 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
   match,
   history,
 }) => {
-  const activityStore = useContext(ActivityStore);
+  const rootStore = useContext(RootStoreContext);
   const {
     createActivity,
     editActivity,
     submitting,
     loadActivity,
-  } = activityStore;
+  } = rootStore.activityStore;
 
   useEffect(() => {
     if (match.params.id) {

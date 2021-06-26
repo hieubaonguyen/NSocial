@@ -1,7 +1,16 @@
+import { observer } from "mobx-react-lite";
+import { Fragment, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Button, Container, Header, Segment, Image } from "semantic-ui-react";
+import { RootStoreContext } from "../../App/stores/RootStore";
+import LoginForm from "../User/Form/LoginForm";
+import RegisterForm from "../User/Form/RegisterForm";
 
 const HomePage = () => {
+  const rootStore = useContext(RootStoreContext);
+  const { isLoggedIn, user } = rootStore.userStore;
+  const { openModal } = rootStore.modalStore;
+
   return (
     <Segment inverted textAlign="center" vertical className="masthead">
       <Container text>
@@ -14,13 +23,31 @@ const HomePage = () => {
           />
           Reactivities
         </Header>
-        <Header as="h2" inverted content="Welcome to Reactivities" />
-        <Button as={Link} to="/activities" size="huge" inverted>
-          Take me to the activities!
-        </Button>
+        {isLoggedIn && user ? (
+          <Fragment>
+            <Header
+              as="h2"
+              inverted
+              content={`Welcome back ${user.displayName}`}
+            />
+            <Button as={Link} to="/activities" size="huge" inverted>
+              Go to activities!
+            </Button>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <Header as="h2" inverted content={`Welcome to Reactivitities`} />
+            <Button onClick={() => openModal(<LoginForm />)} size="huge" inverted>
+              Login
+            </Button>
+            <Button onClick={() => openModal(<RegisterForm />)} size="huge" inverted>
+              Register
+            </Button>
+          </Fragment>
+        )}
       </Container>
     </Segment>
   );
 };
 
-export default HomePage;
+export default observer(HomePage);

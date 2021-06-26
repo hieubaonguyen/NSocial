@@ -1,21 +1,25 @@
-import { action, computed, configure, makeObservable, observable, runInAction } from "mobx";
-import { createContext, SyntheticEvent } from "react";
+import { action, computed, makeObservable, observable, runInAction } from "mobx";
+import { SyntheticEvent } from "react";
 import agent from "../api/agent";
 import {IActivity} from '../Models/Activity';
+import {RootStore} from './RootStore';
 
-configure({enforceActions: 'always'});
 
-export class ActivityStore{
+export default class ActivityStore{
+    
+    rootStore: RootStore;
+
+    constructor(rootStore: RootStore) {
+        makeObservable(this);
+        this.rootStore = rootStore;
+
+    }
 
     @observable activitiesRegistry = new Map();
     @observable loadingInitial = false;
     @observable activity: IActivity | null = null;
     @observable submitting = false;
     @observable target = '';
-
-    constructor() {
-        makeObservable(this);
-    }
 
     @action loadActivities = async () => {
         this.loadingInitial = true;
@@ -144,5 +148,3 @@ export class ActivityStore{
         this.activity = null;
     }
 }
-
-export default createContext(new ActivityStore())

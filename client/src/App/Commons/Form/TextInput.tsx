@@ -11,7 +11,7 @@ const TextInput: React.FC<IProps> = ({
   width,
   type,
   placeholder,
-  meta: { touched, error },
+  meta: { touched, error }
 }) => {
   return (
     <Form.Field error={touched && !!error} type={type} width={width}>
