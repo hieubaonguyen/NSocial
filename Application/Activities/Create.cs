@@ -1,6 +1,8 @@
-﻿using Domain;
+﻿using Application.Interfaces;
+using Domain;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Threading;
@@ -37,9 +39,11 @@ namespace Application.Activities
         public class Handler : IRequestHandler<Command>
         {
             private readonly NSocialDbContext _context;
-            public Handler(NSocialDbContext context)
+            private readonly IUserAccessor _userAccessor;
+            public Handler(NSocialDbContext context, IUserAccessor userAccessor)
             {
                 _context = context;
+                _userAccessor = userAccessor;
             }
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -54,6 +58,19 @@ namespace Application.Activities
                     Venue = request.Venue
                 };
                 _context.activities.Add(activity);
+
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetCurrentUserName());
+
+                var attendee = new UserActivity
+                {
+                    AppUser = user,
+                    Activity = activity,
+                    DateJoined = DateTime.Now,
+                    IsHost = true
+                };
+
+                _context.userActivities.Add(attendee);
+
                 var success = await _context.SaveChangesAsync() > 0;
                 if (success) return Unit.Value;
                 throw new Exception("An error occured when save");

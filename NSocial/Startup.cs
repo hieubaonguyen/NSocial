@@ -33,7 +33,10 @@ namespace NSocial
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<NSocialDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            {
+                options.UseLazyLoadingProxies();
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             services.AddCors(options =>
             {
@@ -43,6 +46,7 @@ namespace NSocial
                 });
             });
             services.AddMediatR(typeof(List.Handler).Assembly);
+            services.AddAutoMapper(typeof(List.Handler).Assembly);
 
             services.AddMvc(opt => 
             {
@@ -56,6 +60,15 @@ namespace NSocial
             services.AddDefaultIdentity<AppUser>()
                 .AddEntityFrameworkStores<NSocialDbContext>();
 
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("IsActivityHost", policy =>
+                {
+                    policy.Requirements.Add(new IsHostRequirement());
+                });
+            });
+
+            services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"]));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
