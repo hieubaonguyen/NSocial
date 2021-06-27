@@ -23,10 +23,11 @@ export default class UserStore {
     @action login = async (values: IUserFormValue) => {
         try{
             const user = await agent.user.login(values);
+            this.rootStore.commonStore.setToken(user.token);
+            this.rootStore.modalStore.closeModal();
             runInAction(() => {
                 this.user = user;
             })
-            this.rootStore.commonStore.setToken(user.token);
             history.push('/activities');
         }catch(error){
             throw error.response;
@@ -38,6 +39,9 @@ export default class UserStore {
             const user = await agent.user.register(values);
             this.rootStore.commonStore.setToken(user.token);
             this.rootStore.modalStore.closeModal();
+            runInAction(() => {
+                this.user = user;
+            })
             history.push('/activities');
         }catch(error){
             throw error.response;

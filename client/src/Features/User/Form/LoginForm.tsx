@@ -49,7 +49,10 @@ const LoginForm = () => {
             placeholder="Password"
           />
           {submitError && !dirtySinceLastSubmit && (
-            <ErrorMessage content="Invalid username or password" />
+            <ErrorMessage
+              content="Invalid username or password"
+              error={submitError}
+            />
           )}
           <Button
             disabled={(invalid && !dirtySinceLastSubmit) || pristine}

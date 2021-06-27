@@ -13,7 +13,7 @@ const validateForm = combineValidators({
   displayname: isRequired("password"),
   username: isRequired("password"),
   email: isRequired("email"),
-  password: isRequired("password"),
+  password: isRequired("password")
 });
 
 const RegisterForm = () => {
@@ -58,7 +58,9 @@ const RegisterForm = () => {
             placeholder="Password"
           />
           {submitError && !dirtySinceLastSubmit && (
-            <ErrorMessage content={JSON.stringify(submitError.data.errors)} />
+            <ErrorMessage
+              error={submitError}
+            />
           )}
           <Button
             disabled={(invalid && !dirtySinceLastSubmit) || pristine}
