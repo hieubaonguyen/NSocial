@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Application.Activities
 {
@@ -14,7 +14,7 @@ namespace Application.Activities
         public string City { get; set; }
         public string Venue { get; set; }
 
-        [JsonProperty("Attendees")]
+        [JsonPropertyName("attendees")]
         public ICollection<AttendeeDto> UserActivities { get; set; }
     }
 }

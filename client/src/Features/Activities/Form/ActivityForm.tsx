@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Form, Grid, Segment } from "semantic-ui-react";
-import { IActivity } from "../../../App/Models/Activity";
+import { ActivityFormValues, IActivity } from "../../../App/Models/Activity";
 import { v4 as uuid } from "uuid";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
@@ -69,15 +69,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
     }
   }, [loadActivity, match.params.id]);
 
-  const [activity, setActivity] = useState<IActivity>({
-    id: "",
-    title: "",
-    category: "",
-    city: "",
-    date: null,
-    description: "",
-    venue: "",
-  });
+  const [activity, setActivity] = useState(new ActivityFormValues());
 
   const [loading, setLoading] = useState(false);
 

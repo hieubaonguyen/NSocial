@@ -48,13 +48,13 @@ namespace NSocial
             services.AddMediatR(typeof(List.Handler).Assembly);
             services.AddAutoMapper(typeof(List.Handler).Assembly);
 
-            services.AddMvc(opt => 
+            /*services.AddMvc(opt => 
             {
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
 
                 opt.Filters.Add(new AuthorizeFilter(policy));
             })
-            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Create>());
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Create>());*/
 
 
             services.AddDefaultIdentity<AppUser>()
@@ -68,7 +68,6 @@ namespace NSocial
                 });
             });
 
-            services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"]));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -86,9 +85,16 @@ namespace NSocial
 
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
 
-            services.AddControllers();
+            services.AddControllers(opt =>
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            })
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Create>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
