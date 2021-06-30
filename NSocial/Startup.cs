@@ -2,6 +2,7 @@ using Application.Activities;
 using Application.Interfaces;
 using Domain;
 using FluentValidation.AspNetCore;
+using Infrastructure.Photos;
 using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -85,7 +86,9 @@ namespace NSocial
 
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.AddScoped<IPhotoAccessor, PhotoAccessor>();
             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("cloudinary"));
 
 
             services.AddControllers(opt =>
