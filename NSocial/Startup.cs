@@ -1,4 +1,5 @@
-using Application.Activities;
+using Application.Activities.Commands.Create;
+using Application.Activities.Queries.List;
 using Application.Interfaces;
 using Domain;
 using FluentValidation.AspNetCore;
@@ -88,7 +89,7 @@ namespace NSocial
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
-            services.Configure<CloudinarySettings>(Configuration.GetSection("cloudinary"));
+            services.Configure<CloudinarySettings>(Configuration.GetSection("Cloundiany"));
 
 
             services.AddControllers(opt =>
@@ -97,7 +98,7 @@ namespace NSocial
 
                 opt.Filters.Add(new AuthorizeFilter(policy));
             })
-            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Create>());
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateValidator>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

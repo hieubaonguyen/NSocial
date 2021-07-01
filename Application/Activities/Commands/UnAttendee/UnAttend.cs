@@ -8,7 +8,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Activities
+namespace Application.Activities.Commands.UnAttendee
 {
     public class UnAttend
     {

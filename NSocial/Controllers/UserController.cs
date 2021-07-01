@@ -1,4 +1,7 @@
 ﻿using Application.Users;
+using Application.Users.Commands.Login;
+using Application.Users.Commands.Register;
+using Application.Users.Queries.CurrentUser;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

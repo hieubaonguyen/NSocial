@@ -1,14 +1,13 @@
 ﻿using Application.Errors;
 using Application.Interfaces;
 using Domain;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Users
+namespace Application.Users.Commands.Login
 {
     public class Login
     {
@@ -18,14 +17,14 @@ namespace Application.Users
             public string Password { get; set; }
         }
 
-        public class CommandValidator : AbstractValidator<Query>
+        /*public class CommandValidator : AbstractValidator<Query>
         {
             public CommandValidator()
             {
                 RuleFor(x => x.Email).NotEmpty();
                 RuleFor(x => x.Password).NotEmpty();
             }
-        }
+        }*/
 
         public class Handler : IRequestHandler<Query, User>
         {

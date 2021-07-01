@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
 using Domain;
-using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -8,7 +7,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Activities
+namespace Application.Activities.Commands.Create
 {
     public class Create
     {
@@ -23,7 +22,7 @@ namespace Application.Activities
             public string Venue { get; set; }
         }
 
-        public class CommandValidator: AbstractValidator<Command>
+        /*public class CommandValidator: AbstractValidator<Command>
         {
             public CommandValidator()
             {
@@ -34,7 +33,7 @@ namespace Application.Activities
                 RuleFor(x => x.City).NotEmpty();
                 RuleFor(x => x.Venue).NotEmpty();
             }
-        }
+        }*/
 
         public class Handler : IRequestHandler<Command>
         {

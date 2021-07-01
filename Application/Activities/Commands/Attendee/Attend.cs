@@ -9,7 +9,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Activities
+namespace Application.Activities.Commands.Attendee
 {
     public class Attend
     {

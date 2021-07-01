@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Users
+namespace Application.Users.Queries.CurrentUser
 {
     public class CurrentUser
     {

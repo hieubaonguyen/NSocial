@@ -15,4 +15,9 @@
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Photos\Queries\" />
+    <Folder Include="Profiles\Commands\" />
+  </ItemGroup>
+
 </Project>

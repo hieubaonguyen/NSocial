@@ -2,14 +2,13 @@
 using AutoMapper;
 using Domain;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Activities
+namespace Application.Activities.Queries.Detail
 {
     public class Detail
     {

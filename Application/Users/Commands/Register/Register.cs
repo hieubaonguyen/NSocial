@@ -1,8 +1,6 @@
 ﻿using Application.Errors;
 using Application.Interfaces;
-using Application.Validators;
 using Domain;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +11,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Users
+namespace Application.Users.Commands.Register
 {
     public class Register
     {
@@ -25,7 +23,7 @@ namespace Application.Users
             public string Password { get; set; }
         }
 
-        public class CommandValidator : AbstractValidator<Command>
+        /*public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
@@ -34,7 +32,7 @@ namespace Application.Users
                 RuleFor(x => x.Email).NotEmpty().EmailAddress();
                 RuleFor(x => x.Password).Password();
             }
-        }
+        }*/
 
         public class Handler : IRequestHandler<Command, User>
         {

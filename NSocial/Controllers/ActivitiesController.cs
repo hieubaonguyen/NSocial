@@ -1,4 +1,11 @@
 ﻿using Application.Activities;
+using Application.Activities.Commands.Attendee;
+using Application.Activities.Commands.Create;
+using Application.Activities.Commands.Delete;
+using Application.Activities.Commands.Edit;
+using Application.Activities.Commands.UnAttendee;
+using Application.Activities.Queries.Detail;
+using Application.Activities.Queries.List;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

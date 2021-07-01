@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Photos
+namespace Application.Photos.Commands.Add
 {
     public class Add
     {
