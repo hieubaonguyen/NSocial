@@ -3,6 +3,7 @@ import {IActivity} from '../Models/Activity';
 import {history} from '../..';
 import { toast } from "react-toastify";
 import { IUser, IUserFormValue } from '../Models/User';
+import { IProfile } from '../Models/Profile';
 
 axios.defaults.baseURL = 'https://localhost:44383';
 
@@ -65,9 +66,14 @@ const user = {
     register: (user: IUserFormValue): Promise<IUser> => request.post('/user/register', user)
 }
 
+const profile = {
+    get: (userName: string): Promise<IProfile> => request.get(`/profile/${userName}`)
+}
+
 const agent = {
     Activities,
-    user
+    user,
+    profile
 }
 
 export default agent;

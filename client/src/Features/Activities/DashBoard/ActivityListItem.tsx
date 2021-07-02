@@ -17,12 +17,13 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
               size="tiny"
               circular
               src={host.image || "/assets/user.png"}
+              styles={{marginBottom: 3}}
             />
             <Item.Content>
               <Item.Header as={Link} to={`/activities/${activity.id}`}>
                 {activity.title}
               </Item.Header>
-              <Item.Description>Hosted By {host.displayName}</Item.Description>
+              <Item.Description>Hosted By <Link to={`/profile/${host.userName}`}>{host.displayName}</Link></Item.Description>
               {activity.isHost && (
                 <Item.Description>
                   <Label

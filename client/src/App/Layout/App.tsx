@@ -16,7 +16,7 @@ import CreateActivity from "../../Features/Activities/Form/ActivityForm";
 import ActivityDetail from "../../Features/Activities/Detail/ActivityDetail";
 import NotFound from "./NotFound";
 import { ToastContainer } from "react-toastify";
-import LoginForm from '../../Features/User/Form/LoginForm';
+import ProfilePage from '../../Features/Profiles/ProfilePage';
 import { RootStoreContext } from "../stores/RootStore";
 import LoadingComponent from "./LoadingComponent";
 import ModalContainer from '../Commons/Modals/ModalContainer';
@@ -70,7 +70,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                   path={["/create-activities", "/manage/:id"]}
                   component={CreateActivity}
                 />
-                <Route path='/login' component={LoginForm}/>
+                <Route path='/profile/:userName' component={ProfilePage}/>
                 <Route component={NotFound} />
               </Switch>
             </Container>
