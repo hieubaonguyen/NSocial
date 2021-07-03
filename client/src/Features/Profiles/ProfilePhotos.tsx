@@ -2,13 +2,27 @@ import { observer } from "mobx-react-lite";
 import React, { useContext, useState } from "react";
 import { Card, Grid, Header, Tab, Image, Button } from "semantic-ui-react";
 import { RootStoreContext } from "../../App/stores/RootStore";
-import PhotoUploadWidget from '../../App/Commons/PhotoUpload/PhotoUploadWidget';
+import PhotoUploadWidget from "../../App/Commons/PhotoUpload/PhotoUploadWidget";
 
 const ProfilePhotos = () => {
+  const rootStore = useContext(RootStoreContext);
+  const {
+    profile,
+    isCurrentUser,
+    uploadingPhoto,
+    uploadPhoto,
+    setMainPhoto,
+    loading,
+    deletePhoto
+  } = rootStore.profileStore;
 
-    const rootStore = useContext(RootStoreContext);
-    const {profile, isCurrentUser} = rootStore.profileStore;
-    const [addPhotoMode, setAddPhotoMode] = useState(true);
+  const [addPhotoMode, setAddPhotoMode] = useState(false);
+  const [targetSetMain, setTargetSetMain] = useState<string | null>(null);
+  const [targetDelete, setTargetDelete] = useState<string | null>(null);
+
+  const handleUploadPhoto = (file: Blob) => {
+    uploadPhoto(file).then(() => setAddPhotoMode(false));
+  };
 
   return (
     <Tab.Pane>
@@ -27,6 +41,8 @@ const ProfilePhotos = () => {
         <Grid.Column width={16}>
           {addPhotoMode ? (
             <PhotoUploadWidget
+              uploadingPhoto={uploadingPhoto}
+              uploadPhoto={handleUploadPhoto}
             />
           ) : (
             <Card.Group itemsPerRow={5}>
@@ -42,6 +58,11 @@ const ProfilePhotos = () => {
                           basic
                           positive
                           content="Main"
+                          loading={targetSetMain === photo.id && loading}
+                          onClick={(e) => {
+                            setMainPhoto(photo);
+                            setTargetSetMain(e.currentTarget.name);
+                          }}
                         />
                         <Button
                           name={photo.id}
@@ -49,6 +70,12 @@ const ProfilePhotos = () => {
                           basic
                           negative
                           icon="trash"
+                          loading={targetDelete === photo.id && loading}
+                          onClick={(e) => {
+                            setTargetSetMain(null);
+                            deletePhoto(photo);
+                            setTargetDelete(e.currentTarget.name);
+                          }}
                         />
                       </Button.Group>
                     )}

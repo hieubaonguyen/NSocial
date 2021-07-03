@@ -143,12 +143,14 @@ export default class ActivityStore {
     this.loadingAttendee = true;
     try {
       await agent.Activities.attend(this.activity!.id);
-      if (this.activity) {
-        this.activity.attendees.push(attendee);
-        this.activity.isGoing = true;
-        this.activitiesRegistry.set(this.activity.id, this.activity);
-        this.loadingAttendee = false;
-      }
+      runInAction(() => {
+        if (this.activity) {
+          this.activity.attendees.push(attendee);
+          this.activity.isGoing = true;
+          this.activitiesRegistry.set(this.activity.id, this.activity);
+          this.loadingAttendee = false;
+        }
+      });
     } catch (error) {
       console.log(error);
       toast.error("Problem signing up to activity");
@@ -162,14 +164,16 @@ export default class ActivityStore {
     this.loadingAttendee = true;
     try {
       await agent.Activities.unattend(this.activity!.id);
-      if (this.activity) {
-        this.activity.attendees = this.activity.attendees.filter(
-          (a) => a.userName !== this.rootStore.userStore.user?.userName
-        );
-        this.activity.isGoing = false;
-        this.activitiesRegistry.set(this.activity.id, this.activity);
-        this.loadingAttendee = false;
-      }
+      runInAction(() => {
+        if (this.activity) {
+          this.activity.attendees = this.activity.attendees.filter(
+            (a) => a.userName !== this.rootStore.userStore.user?.userName
+          );
+          this.activity.isGoing = false;
+          this.activitiesRegistry.set(this.activity.id, this.activity);
+          this.loadingAttendee = false;
+        }
+      });
     } catch (error) {
       console.log(error);
       toast.error("Problem cancelling attendee");

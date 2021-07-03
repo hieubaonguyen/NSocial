@@ -33,6 +33,7 @@ const LoginForm = () => {
         invalid,
         pristine,
         dirtySinceLastSubmit,
+        form
       }) => (
         <Form onSubmit={handleSubmit}>
           <Header

@@ -34,8 +34,7 @@ const RegisterForm = () => {
         submitError,
         invalid,
         pristine,
-        dirtySinceLastSubmit,
-        form,
+        dirtySinceLastSubmit
       }) => (
         <Form onSubmit={handleSubmit}>
           <Header
