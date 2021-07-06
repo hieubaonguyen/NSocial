@@ -2,7 +2,7 @@ export interface IProfile {
     displayName: string;
     userName: string;
     image: string;
-    bio: boolean;
+    bio: string;
     photos: IPhoto[];
 }
 

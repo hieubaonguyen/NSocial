@@ -102,5 +102,25 @@ export default class ProfileStore {
         this.loading = false;
       });
     }
-  }
+  };
+
+  @action updateProfile = async (profile: Partial<IProfile>) => {
+    this.loading = true;
+    try {
+      await agent.profile.updateProfile(profile);
+      runInAction(() => {
+        this.profile = {...this.profile!, ...profile};
+        if(this.rootStore!.userStore.user!.displayName !== profile.displayName!){
+          this.rootStore!.userStore.user!.displayName = profile.displayName!; 
+        }
+        this.loading = false;
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error("Problem Edit Profile");
+      runInAction(() => {
+        this.loading = false;
+      });
+    }
+  };
 }
