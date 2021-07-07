@@ -44,8 +44,19 @@ export default class ActivityStore {
       .catch((error) => console.log("Error Establishing Connection: ", error));
 
     this.hubConnection.on("RecieveComment", (comment) => {
-      this.activity?.comments.push(comment);
+      runInAction(() => {
+        this.activity!.comments!.push(comment);
+      });
     });
+  };
+
+  @action addMessage = async (values: any) => {
+    values.activityId = this.activity!.id;
+    try {
+      await this.hubConnection!.invoke("SendMessage", values);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   @action stopHubConnection = () => {
@@ -107,6 +118,7 @@ export default class ActivityStore {
       attendees.push(attendee);
       activity.attendees = attendees;
       activity.isHost = true;
+      activity.comments = [];
       runInAction(() => {
         this.activitiesRegistry.set(activity.id, activity);
         this.activity = activity;
