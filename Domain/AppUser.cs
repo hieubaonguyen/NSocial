@@ -9,5 +9,6 @@ namespace Domain
         public string Bio { get; set; }
         public virtual ICollection<UserActivity> UserActivities { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 }

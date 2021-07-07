@@ -1,6 +1,7 @@
 using Application.Activities.Commands.Create;
 using Application.Activities.Queries.List;
 using Application.Interfaces;
+using Application.SignalR;
 using Domain;
 using FluentValidation.AspNetCore;
 using Infrastructure.Photos;
@@ -19,6 +20,7 @@ using Microsoft.IdentityModel.Tokens;
 using NSocialAdmin.Middlewares;
 using Persistence;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NSocial
 {
@@ -82,9 +84,24 @@ namespace NSocial
                         ValidateAudience = false,
                         ValidateIssuer = false
                     };
+                    opt.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                                (path.StartsWithSegments("/chat")))
+                            {
+                                context.Token = accessToken;
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 
-
+            services.AddSignalR();
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
@@ -124,6 +141,7 @@ namespace NSocial
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
             });
         }
     }

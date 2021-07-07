@@ -149,7 +149,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                 <Button
                   onClick={
                     activity.id
-                      ? () => history.push(`/activities${activity.id}`)
+                      ? () => history.push(`/activities/${activity.id}`)
                       : () => history.push("/activities")
                   }
                   floated="right"

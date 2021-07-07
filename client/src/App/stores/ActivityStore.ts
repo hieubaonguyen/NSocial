@@ -11,6 +11,8 @@ import { IActivity } from "../Models/Activity";
 import { RootStore } from "./RootStore";
 import { createAttendee, setActivityProps } from "../Commons/Utils/util";
 import { toast } from "react-toastify";
+import { HubConnection, LogLevel } from "@microsoft/signalr";
+import * as signalR from "@microsoft/signalr";
 
 export default class ActivityStore {
   rootStore: RootStore;
@@ -26,6 +28,29 @@ export default class ActivityStore {
   @observable submitting = false;
   @observable target = "";
   @observable loadingAttendee = false;
+  @observable.ref hubConnection: HubConnection | null = null;
+
+  @action createHubConnection = () => {
+    this.hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl("https://localhost:44383/chat", {
+        accessTokenFactory: () => this.rootStore.commonStore.token!,
+      })
+      .configureLogging(LogLevel.Information)
+      .build();
+
+    this.hubConnection
+      .start()
+      .then(() => console.log(this.hubConnection?.state))
+      .catch((error) => console.log("Error Establishing Connection: ", error));
+
+    this.hubConnection.on("RecieveComment", (comment) => {
+      this.activity?.comments.push(comment);
+    });
+  };
+
+  @action stopHubConnection = () => {
+    this.hubConnection!.stop();
+  };
 
   @action loadActivities = async () => {
     this.loadingInitial = true;

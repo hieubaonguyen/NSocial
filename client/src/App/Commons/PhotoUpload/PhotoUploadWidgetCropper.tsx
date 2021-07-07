@@ -11,6 +11,7 @@ const PhotoUploadWidgetCropper: React.FC<IProps> = ({
   setImage,
   imagePreview,
 }) => {
+  
   const cropperRef = useRef<HTMLImageElement>(null);
   const cropImage = () => {
     const imageElement: any = cropperRef?.current;
