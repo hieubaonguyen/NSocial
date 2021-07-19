@@ -6,5 +6,6 @@
         public string UserName { get; set; }
         public bool IsHost { get; set; }
         public string Image { get; set; }
+        public bool IsFollowing { get; set; }
     }
 }

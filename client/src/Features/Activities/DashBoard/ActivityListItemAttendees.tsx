@@ -6,6 +6,11 @@ interface IProps {
   attendees: IAttendee[];
 }
 
+const style = {
+  borderColor: "orange",
+  borderWidth: 2,
+};
+
 const ActivityListItemAttendees: React.FC<IProps> = ({ attendees }) => {
   return (
     <List horizontal>
@@ -14,7 +19,13 @@ const ActivityListItemAttendees: React.FC<IProps> = ({ attendees }) => {
           <Popup
             header={attendee.displayName}
             trigger={
-              <Image src={attendee.image || "/assets/user.png"} size="mini" />
+              <Image
+                src={attendee.image || "/assets/user.png"}
+                size="mini"
+                bordered
+                circular
+                style={attendee.isFollowing ? style : null}
+              />
             }
           />
         </List.Item>

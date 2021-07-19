@@ -1,6 +1,7 @@
 using Application.Activities.Commands.Create;
 using Application.Activities.Queries.List;
 using Application.Interfaces;
+using Application.Profiles;
 using Application.SignalR;
 using Domain;
 using FluentValidation.AspNetCore;
@@ -52,14 +53,6 @@ namespace NSocial
             services.AddMediatR(typeof(List.Handler).Assembly);
             services.AddAutoMapper(typeof(List.Handler).Assembly);
 
-            /*services.AddMvc(opt => 
-            {
-                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-
-                opt.Filters.Add(new AuthorizeFilter(policy));
-            })
-            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Create>());*/
-
 
             services.AddDefaultIdentity<AppUser>()
                 .AddEntityFrameworkStores<NSocialDbContext>();
@@ -105,6 +98,7 @@ namespace NSocial
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+            services.AddScoped<IProfileReader, ProfileReader>();
             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloundiany"));
 

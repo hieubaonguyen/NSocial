@@ -30,6 +30,7 @@ export interface IAttendee {
     userName: string;
     isHost: boolean;
     image: string;
+    isFollowing?: boolean;
 }
 
 export interface IComment {

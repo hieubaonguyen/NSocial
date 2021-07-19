@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Following\Queries\" />
     <Folder Include="Photos\Queries\" />
   </ItemGroup>
 
