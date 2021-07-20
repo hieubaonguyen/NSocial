@@ -10,7 +10,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace NSocialAdmin.Controllers
@@ -18,9 +17,9 @@ namespace NSocialAdmin.Controllers
     public class ActivitiesController : BaseController
     {
         [HttpGet]
-        public async Task<ActionResult<List<ActivityDto>>> List()
+        public async Task<ActionResult<ActivitiesEnvelope>> List(int? limit, int? offset)
         {
-            return await Mediator.Send(new List.Query());
+            return await Mediator.Send(new List.Query { Limit = limit, Offset = offset });
         }
         [HttpGet("{Id}")]
         public async Task<ActionResult<ActivityDto>> Detail(Guid id)
