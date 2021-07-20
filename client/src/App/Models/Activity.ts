@@ -1,3 +1,8 @@
+export interface IActivityEnvelope{
+    activities: IActivity[];
+    activitiesCount: number;
+}
+
 export interface IActivity{
     id: string;
     title:string;

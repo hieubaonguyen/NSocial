@@ -14,6 +14,8 @@ import { toast } from "react-toastify";
 import { HubConnection, LogLevel } from "@microsoft/signalr";
 import * as signalR from "@microsoft/signalr";
 
+const LIMIT = 2;
+
 export default class ActivityStore {
   rootStore: RootStore;
 
@@ -29,6 +31,16 @@ export default class ActivityStore {
   @observable target = "";
   @observable loadingAttendee = false;
   @observable.ref hubConnection: HubConnection | null = null;
+  @observable activitiesCount: number = 0;
+  @observable page: number = 0;
+
+  @computed get getTotalPage() {
+    return Math.ceil(this.activitiesCount / LIMIT);
+  }
+
+  @action setPage = (page: number) => {
+    this.page = page;
+  };
 
   @action createHubConnection = () => {
     this.hubConnection = new signalR.HubConnectionBuilder()
@@ -66,12 +78,14 @@ export default class ActivityStore {
   @action loadActivities = async () => {
     this.loadingInitial = true;
     try {
-      const activities = await agent.Activities.list();
+      const activitiesEnvelope = await agent.Activities.list(LIMIT, this.page);
+      const { activities, activitiesCount } = activitiesEnvelope;
       runInAction(() => {
         activities.forEach((activity) => {
           setActivityProps(activity, this.rootStore.userStore.user!);
           this.activitiesRegistry.set(activity.id, activity);
         });
+        this.activitiesCount = activitiesCount;
         this.loadingInitial = false;
       });
       // console.log(this.groupActivitiesByDate(activities));
