@@ -34,6 +34,10 @@ export default class ActivityStore {
   @observable activitiesCount: number = 0;
   @observable page: number = 0;
 
+  @computed get getCountActivities(){
+    return this.activitiesRegistry.size;
+  }
+
   @computed get getTotalPage() {
     return Math.ceil(this.activitiesCount / LIMIT);
   }
