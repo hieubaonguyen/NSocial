@@ -23,10 +23,20 @@ axios.interceptors.response.use(undefined, (error) => {
     toast.error("Network error - make sure API is running!");
   }
 
-  const { status, data, config } = error.response;
+  const { status, data, config, headers } = error.response;
 
   if (status === 404) {
     history.push("/notfound");
+  }
+
+  if (
+    status === 401 &&
+    headers["www-authenticate"] ===
+      'Bearer error="invalid_token", error_description="The token is expired"'
+  ) {
+    window.localStorage.removeItem('jwt');
+    history.push('/');
+    toast.info("Your session has expired, please login again");
   }
 
   if (
@@ -106,6 +116,8 @@ const profile = {
   unfollow: (username: string) => request.delete(`/profile/${username}/follow`),
   listFollowings: (username: string, predicate: string) =>
     request.get(`/profile/${username}/follow?predicate=${predicate}`),
+  listActivities: (username: string, predicate: string) =>
+    request.get(`/profile/${username}/activities?predicate=${predicate}`),
 };
 
 const agent = {

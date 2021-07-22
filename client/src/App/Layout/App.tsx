@@ -20,6 +20,7 @@ import ProfilePage from '../../Features/Profiles/ProfilePage';
 import { RootStoreContext } from "../stores/RootStore";
 import LoadingComponent from "./LoadingComponent";
 import ModalContainer from '../Commons/Modals/ModalContainer';
+import PrivateRoute from './PrivateRoute';
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
 
@@ -59,19 +60,19 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
             <NavBar />
             <Container style={{ marginTop: "7em" }}>
               <Switch>
-                <Route
+                <PrivateRoute
                   exact
                   path="/activities"
                   component={DashBoardActivities}
                 />
-                <Route path="/activities/:id" component={ActivityDetail} />
-                <Route
+                <PrivateRoute path="/activities/:id" component={ActivityDetail} />
+                <PrivateRoute
                   key={location.key}
                   path={["/create-activities", "/manage/:id"]}
                   component={CreateActivity}
                 />
-                <Route path='/profile/:userName' component={ProfilePage}/>
-                <Route component={NotFound} />
+                <PrivateRoute path='/profile/:userName' component={ProfilePage}/>
+                <PrivateRoute component={NotFound} />
               </Switch>
             </Container>
           </Fragment>
