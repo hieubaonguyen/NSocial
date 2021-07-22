@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import LoadingComponent from "../../../App/Layout/LoadingComponent";
 import { RootStoreContext } from "../../../App/stores/RootStore";
 import InfiniteScroll from "react-infinite-scroll-component";
+import ActivityFilter from './ActivityFilter';
 
 const style = {
   overflow: "hidden",
@@ -49,7 +50,7 @@ const DashBoardActivities = () => {
         </InfiniteScroll>
       </GridColumn>
       <GridColumn width={6}>
-        <h1>Activity</h1>
+        <ActivityFilter />
       </GridColumn>
       <GridColumn width={10}>
         <Loader active={loadingNext} />
