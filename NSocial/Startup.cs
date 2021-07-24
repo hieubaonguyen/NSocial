@@ -35,14 +35,29 @@ namespace NSocial
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureDevelopmentServices(IServiceCollection services)
         {
             services.AddDbContext<NSocialDbContext>(options =>
             {
                 options.UseLazyLoadingProxies();
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+            ConfigureServices(services);
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
+            services.AddDbContext<NSocialDbContext>(options =>
+            {
+                options.UseLazyLoadingProxies();
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
+            ConfigureServices(services);
+        }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
 
             services.AddCors(options =>
             {
@@ -132,6 +147,24 @@ namespace NSocial
 
             app.UseCors("CorsPolicy");
 
+            app.UseXContentTypeOptions();
+            app.UseReferrerPolicy(opt => opt.NoReferrer());
+            app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
+            app.UseXfo(opt => opt.Deny());
+            app.UseCsp(opt => opt
+                .BlockAllMixedContent()
+                .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com", "sha256-4JqrX7rrNLxYOU9KFPHnQGL6TQuE9qWtUPge+ZpwA9o="))
+                .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
+                .FormActions(s => s.Self())
+                .FrameAncestors(s => s.Self())
+                .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com", "blob:", "data:"))
+                .ScriptSources(s => s.Self().CustomSources("sha256-gKFLs9z9yMQVHHv19x4dASlsOb55tazfrJyiROetFp0="))
+            );
+
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             app.UseAuthentication();
 
             app.UseHttpsRedirection();
@@ -142,6 +175,7 @@ namespace NSocial
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapFallbackToController("Index", "Fallback");
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/chat");
             });
